@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body>
+    <h3>Bug demo that shows &#123&#123 verbatim &#125&#125 inside the content of a Twig Component!</h3>
+    <div>
+        <h4>This works</h4>
+        <p>Without a twig component we can render:</p>
+        {% verbatim %}
+            {{ include('a-file') }}
+        {% endverbatim %}
+        <p>from in side &#123&#123 verbatim &#125&#125 tags</p>
+    </div>
+
+    <div>
+        <h4>This does not work...</h4>
+        <p><i>Uncomment template code to render error</i></p>
+{#        <twig:Code>#}
+{#            {% verbatim %}#}
+{#                {{ include('a-file') }}#}
+{#            {% endverbatim %}#}
+{#        </twig:Code>#}
+    </div>
+
+    <div>
+        <h4>This does not work either...</h4>
+        <p><i>Uncomment template code to render error</i></p>
+{#        <twig:AltCode>#}
+{#            {% verbatim %}#}
+{#                {{ include('a-file') }}#}
+{#            {% endverbatim %}#}
+{#        </twig:AltCode>#}
+    </div>
+
+    <div>
+        <h4>Nor does this...</h4>
+        <p><i>Uncomment template code to render error</i></p>
+{#            <twig:Code>#}
+{#                {% verbatim %}#}
+{#                    Howdy#}
+{#                {% endverbatim %}#}
+{#            </twig:Code>#}
+    </div>
+
+    <div>
+        <h4>This does work, but seams counterintuitive</h4>
+        <twig:Code>
+            {% block content %}
+                {% verbatim %}
+                    {{ include('a-file') }}
+                {% endverbatim %}
+            {% endblock %}
+        </twig:Code>
+    </div>
+
+    <div>
+        <hr>
+        <h2>Stack Trace:</h2>
+        <pre>
+Twig\Error\SyntaxError:
+A template that extends another one cannot include content outside Twig blocks. Did you forget to put the content inside a &#123% block %} tag?
+
+  at templates/base.html.twig:52
+  at Twig\Parser->filterBodyNodes()
+     (vendor/twig/twig/src/Parser.php:343)
+  at Twig\Parser->filterBodyNodes()
+     (vendor/twig/twig/src/Parser.php:85)
+  at Twig\Parser->parse()
+     (vendor/symfony/ux-twig-component/src/Twig/ComponentTokenParser.php:62)
+  at Symfony\UX\TwigComponent\Twig\ComponentTokenParser->parse()
+     (vendor/twig/twig/src/Parser.php:173)
+  at Twig\Parser->subparse()
+     (vendor/twig/twig/src/Parser.php:83)
+  at Twig\Parser->parse()
+     (vendor/twig/twig/src/Environment.php:516)
+  at Twig\Environment->parse()
+     (vendor/twig/twig/src/Environment.php:544)
+  at Twig\Environment->compileSource()
+     (vendor/twig/twig/src/Environment.php:374)
+  at Twig\Environment->loadTemplate()
+     (vendor/twig/twig/src/Environment.php:336)
+  at Twig\Environment->load()
+     (vendor/twig/twig/src/Environment.php:299)
+  at Twig\Environment->render()
+     (vendor/symfony/framework-bundle/Controller/TemplateController.php:49)
+  at Symfony\Bundle\FrameworkBundle\Controller\TemplateController->templateAction()
+     (vendor/symfony/framework-bundle/Controller/TemplateController.php:73)
+  at Symfony\Bundle\FrameworkBundle\Controller\TemplateController->__invoke()
+     (vendor/symfony/http-kernel/HttpKernel.php:178)
+  at Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+     (vendor/symfony/http-kernel/HttpKernel.php:76)
+  at Symfony\Component\HttpKernel\HttpKernel->handle()
+     (vendor/symfony/http-kernel/Kernel.php:185)
+  at Symfony\Component\HttpKernel\Kernel->handle()
+     (vendor/symfony/runtime/Runner/Symfony/HttpKernelRunner.php:35)
+  at Symfony\Component\Runtime\Runner\Symfony\HttpKernelRunner->run()
+     (vendor/autoload_runtime.php:29)
+  at require_once('/home/jrdev/develop/php/bug-demo-verbatim/vendor/autoload_runtime.php')
+     (public/index.php:5)
+        </pre>
+    </div>
+    </body>
+</html>
